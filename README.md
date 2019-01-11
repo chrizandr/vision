@@ -1,2 +1,2 @@
 # vision
-Computer Vision course at IIIT Hyderabad
+Assignments and codes Computer Vision course at IIIT Hyderabad
