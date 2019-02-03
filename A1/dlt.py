@@ -70,6 +70,8 @@ if __name__ == "__main__":
                              [402.514, 132.227], [385.822, 237.047], [465.94, 277.77]])
     projection_matrix = DLT_method(image_points, world_points)
     K, R, C = decompose_projection(projection_matrix)
-
+    print(K)
+    print(R)
+    print(C)
     error = find_projection_error(projection_matrix, image_points, world_points)
     print(error)

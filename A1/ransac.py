@@ -1,7 +1,7 @@
 import numpy as np
 # import pdb
 
-from dlt import DLT_method, find_projection_error
+from dlt import DLT_method, find_projection_error, decompose_projection
 
 
 def ransac_estimation(image_points, world_points, iter=500):
@@ -28,6 +28,7 @@ def ransac_estimation(image_points, world_points, iter=500):
 if __name__ == "__main__":
     from points import image_points, world_points
     projection_matrix = ransac_estimation(image_points, world_points)
-
-    error = find_projection_error(projection_matrix, image_points, world_points)
-    print(error)
+    K, R, C = decompose_projection(projection_matrix)
+    print(K)
+    print(R)
+    print(C)
