@@ -60,16 +60,6 @@ def show_matches(imageA, imageB, matches_A, matches_B):
 
 def warp_project(imageA, imageB, homography):
     """Join two images given the homography matrix."""
-    # hA, wA = imageA.shape[:2]
-    # hB, wB = imageB.shape[:2]
-    #
-    # final_image = cv2.warpPerspective(imageA, homography, (wA+wB, hA+hB))
-    # pdb.set_trace()
-    # final_image[0:hB, 0:wB] = imageB
-    #
-    # cv2.imwrite("res_2.png", final_image)
-    #
-    # return final_image
     h1, w1 = imageA.shape[:2]
     h2, w2 = imageB.shape[:2]
     pts1 = np.float32([[0, 0], [0, h1], [w1, h1], [w1, 0]]).reshape(-1, 1, 2)
@@ -82,61 +72,43 @@ def warp_project(imageA, imageB, homography):
     Ht = np.array([[1, 0, t[0]], [0, 1, t[1]], [0, 0, 1]])
 
     result = cv2.warpPerspective(imageB, Ht.dot(homography), (xmax-xmin, ymax-ymin))
+    cv2.imwrite("project.png", result)
     result[t[1]:h1+t[1], t[0]:w1+t[0]] = imageA
     return result
 
     # cv2.waitKey(0)
 
 
-def mix_and_match(base_img, warped_img):
-    i1y, i1x = base_img.shape[:2]
-    i2y, i2x = warped_img.shape[:2]
-
-    for i in range(0, i1x):
-        for j in range(0, i1y):
-            try:
-                if(np.array_equal(base_img[j, i], np.array([0, 0, 0])) and
-                   np.array_equal(warped_img[j, i], np.array([0, 0, 0]))):
-                    warped_img[j, i] = [0, 0, 0]
-                else:
-                    if(np.array_equal(warped_img[j, i], [0, 0, 0])):
-                        warped_img[j, i] = base_img[j, i]
-                    else:
-                        if not np.array_equal(base_img[j, i], [0, 0, 0]):
-                            bl, gl, rl = base_img[j, i]
-                            warped_img[j, i] = [bl, gl, rl]
-            except:
-                pass
-
-    return warped_img
-
-
 if __name__ == "__main__":
-    # imageA = cv2.imread("Assignment_Data/img1_1.png")
-    # imageB = cv2.imread("Assignment_Data/img1_2.png")
-    #
-    # stitched_image = stitch(imageB, imageA)
+    imageA = cv2.imread("Assignment_Data/img1_1.png")
+    imageB = cv2.imread("Assignment_Data/img1_2.png")
 
-    # images = ["img2_1.png", "img2_2.png", "img2_3.png", "img2_4.png", "img2_5.png", "img2_6.png"]
-    # images = [cv2.imread("Assignment_Data/" + x) for x in images]
-    #
-    # stitched_image = stitch_multiple(images)
-    #
-    # cv2.imwrite("res_2.png", stitched_image)
-    #
-    # images = ["img3_1.png", "img3_2.png"]
-    # images = [cv2.imread("Assignment_Data/" + x) for x in images]
-    #
-    # stitched_image = stitch_multiple(images)
-    #
-    # cv2.imwrite("res_3.png", stitched_image)
+    stitched_image = stitch(imageB, imageA)
 
-    images = ["img4_1.jpg", "img4_2.jpg"]
+    images = ["img2_1.png", "img2_2.png", "img2_3.png", "img2_4.png", "img2_5.png", "img2_6.png"]
+    images = [cv2.imread("Assignment_Data/" + x) for x in images]
+
+    stitched_image = stitch_multiple(images)
+
+    cv2.imwrite("res_2.png", stitched_image)
+
+    images = ["img3_1.png", "img3_2.png"]
     images = [cv2.imread("Assignment_Data/" + x) for x in images]
 
     stitched_image = stitch_multiple(images)
 
     cv2.imwrite("res_3.png", stitched_image)
 
-    plt.imshow(stitched_image)
-    plt.show()
+    images = ["img4_1.jpg", "img4_2.jpg"]
+    images = [cv2.imread("Assignment_Data/" + x) for x in images]
+
+    stitched_image = stitch_multiple(images)
+
+    cv2.imwrite("res_4.png", stitched_image)
+
+    images = ["t1.jpg", "t2.jpg", "t2.jpg"]
+    images = [cv2.imread(x) for x in images]
+
+    stitched_image = stitch_multiple(images)
+
+    cv2.imwrite("res_5.png", stitched_image)
